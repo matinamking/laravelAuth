@@ -27,7 +27,7 @@ class HomeController extends Controller
         $user = auth()->user();
 
         $allow = Gate::allows('view' , $user);
-        
+
         return view('home');
     }
 }

@@ -13,6 +13,14 @@
     <div class="container mt-5">
         <h2 class="mb-4 text-center">مدیریت کاربران</h2>
 
+        <div class="text-danger">
+            <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{$error}}</li>
+            @endforeach
+            </ul>
+        </div>
+
         <button class="btn btn-success mb-3" data-toggle="modal" data-target="#addUserModal">کاربر جدید</button>
 
         <table class="table table-bordered">
@@ -36,7 +44,6 @@
                         <td>{{ $value->name }}</td>
                     </tr>
 
-
                     <div class="modal fade" id="editUserModal{{ $value->id }}" tabindex="-1" role="dialog"
                         aria-labelledby="editUserModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
@@ -48,22 +55,22 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="{{ route('admin.update', $value->id) }}" method="POST">
-                                        <input type="hidden" name="_method" value="PUT">
+                                    <form action="{{ route('admin.update' ,  $value->id)}}" method="POST">
                                         @csrf
+                                        @method('PATCH')
                                         <div class="form-group">
-                                            <label for="editUserName">نام</label>
-                                            <input type="text" class="form-control" id="editUserName"
+                                            <label for="name">نام</label>
+                                            <input name="name" type="text" class="form-control" id="name"
                                                 value="{{ $value->name }}" required>
                                         </div>
                                         <div class="form-group">
-                                            <label for="editUserEmail">ایمیل</label>
-                                            <input type="email" class="form-control" id="editUserEmail"
+                                            <label for="email">ایمیل</label>
+                                            <input name="email" type="email" class="form-control" id="email"
                                                 value="{{ $value->email }}" required>
                                         </div>
                                         <div class="form-group">
-                                            <label for="editPassUserName">پسورد</label>
-                                            <input type="password" class="form-control" id="editPassUserName" required>
+                                            <label for="password">پسورد</label>
+                                            <input name="password" type="password" class="form-control" id="password" required>
                                         </div>
                                         <button type="submit" class="btn btn-primary">ویرایش</button>
                                     </form>
@@ -85,7 +92,7 @@
                                 <div class="modal-body">
                                     <form action="{{ route('admin.destroy', $value->id) }}" method="POST">
                                         @csrf
-                                        <input type="hidden" name="_method" value="DELETE">
+                                        @method('DELETE')
                                         <div class="form-group">
                                             <label for="deleteUserName">نام کاربر</label>
                                             <input type="text" value="{{ $value->name }}" class="form-control"
@@ -119,19 +126,19 @@
                 </div>
 
                 <div class="modal-body">
-                    <form id="addUserForm">
+                    <form action="{{ route('admin.store')}}" method="POST">
                         @csrf
                         <div class="form-group">
-                            <label for="addUserName">نام</label>
-                            <input type="text" class="form-control" id="addUserName" required>
+                            <label for="name">نام</label>
+                            <input name="name" type="text" class="form-control" id="name" required>
                         </div>
                         <div class="form-group">
                             <label for="addUserEmail">ایمیل</label>
-                            <input type="email" class="form-control" id="addUserEmail" required>
+                            <input name="email" type="email" class="form-control" id="addUserEmail" required>
                         </div>
                         <div class="form-group">
                             <label for="addUserPassword">پسورد</label>
-                            <input type="password" class="form-control" id="addUserPassword" required>
+                            <input name="password" type="password" class="form-control" id="addUserPassword" required>
                         </div>
                         <button type="submit" class="btn btn-primary">افزودن</button>
                     </form>
@@ -143,46 +150,6 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <script>
-        function reloadPages() {
-            $(document).ready(function() {
-                location.reload();
-            });
-        }
-
-        $('#addUserForm').submit(function(event) {
-            event.preventDefault();
-            $.ajax({
-                url: '/admin',
-                method: 'POST',
-                data: $(this).serialize(),
-                success: function() {
-                    $('#addUserModal').modal('hide');
-                    reloadPages();
-                }
-            });
-        });
-
-        $('#editUserForm').submit(function(event) {
-            event.preventDefault();
-            const id = $('#editUserId').val();
-            const name = $('#editUserName').val();
-            const email = $('#editUserEmail').val();
-
-            $.ajax({
-                url: `/api/users/${id}`,
-                method: 'PUT',
-                data: {
-                    name: name,
-                    email: email
-                },
-                success: function() {
-                    $('#editUserModal').modal('hide');
-                }
-            });
-        });
-    </script>
 
 </body>
 
