@@ -12,9 +12,9 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-//Route::resource('admin' , AdminController::class )->except(["edit","show","create"])->middleware('auth');
-
-Route::get('/admin',[AdminController::class,'index'])->name('admin')->middleware('auth');
-Route::post('/admin/store',[AdminController::class,'store'])->name('admin.store')->middleware('auth');
-Route::patch('/admin/update/{user}',[AdminController::class,'update'])->name('admin.update')->middleware('auth');
-Route::delete('/admin/destroy/{user}',[AdminController::class,'destroy'])->name('admin.destroy')->middleware('auth');
+Route::prefix('admin')->group(function(){
+    Route::get('/',[AdminController::class,'index'])->name('admin')->middleware('auth');
+    Route::post('/store',[AdminController::class,'store'])->name('admin.store')->middleware('auth');
+    Route::patch('/update/{user}',[AdminController::class,'update'])->name('admin.update')->middleware('auth');
+    Route::delete('/destroy/{user}',[AdminController::class,'destroy'])->name('admin.destroy')->middleware('auth');
+});
