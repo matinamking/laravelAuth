@@ -36,10 +36,10 @@ class AdminRequest extends FormRequest
         ];
     }
 
-    public function passedValidation()
-    {
-        $this->merge([
-            'password' => Hash::make($this->password)
-        ]);
-    }
+//    public function passedValidation()
+//    {
+//        $this->merge([
+//            'password' => Hash::make($this->password)
+//        ]);
+//    }
 }
